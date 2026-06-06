@@ -3,6 +3,18 @@
         {
             "type": "project",
             "summary": "Started building Babilious"
+        },
+        {
+            "type": "project",
+            "summary": "Started working on Babilious"
+        },
+        {
+            "type": "goal",
+            "summary": "Build a memorable AI companion"
+        },
+        {
+            "type": "milestone",
+            "summary": "Created memory system"
         }
     ]
 }
