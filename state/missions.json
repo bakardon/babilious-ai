@@ -1,0 +1,19 @@
+{
+    "missions": [
+        {
+            "title": "Establish the First Expedition Archive",
+            "objective": "Push Babilious to GitHub",
+            "completed": false
+        },
+        {
+            "title": "Map the Architecture",
+            "objective": "Create architecture diagram",
+            "completed": false
+        },
+        {
+            "title": "Build the First Outpost",
+            "objective": "Create first UI",
+            "completed": false
+        }
+    ]
+}

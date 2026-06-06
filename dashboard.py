@@ -1,5 +1,6 @@
 from memory_manager import load_memory
 from state_manager import load_state
+from mission_manager import mission_count, completed_count
 
 data = load_memory()
 state = load_state()
@@ -18,6 +19,8 @@ for entry in data["entries"][-5:]:
     
 print("\nStatistics")
 print("------------------")
+print(f"Total Missions: {mission_count()}")
+print(f"Completed Missions: {completed_count()}")
 print(f"Total Adventures: {len(data['entries'])}")
 
 print("\nCurrent Mode")

@@ -49,3 +49,9 @@ babilious-ai/
 ## Vision
 
 The goal is to create a companion that remembers your journey, tracks your adventures, and helps transform goals into stories worth telling.
+
+## What Makes Babilious Different?
+
+Most AI assistants answer questions.
+
+Babilious remembers adventures, tracks missions, and helps users transform ambitions into stories worth telling.
