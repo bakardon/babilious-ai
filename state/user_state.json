@@ -1,0 +1,9 @@
+{
+    "current_expedition": "Build Babilious",
+    "mode": "Builder",
+    "active_missions": [
+        "Push project to GitHub",
+        "Create architecture diagram",
+        "Build first UI"
+    ]
+}
