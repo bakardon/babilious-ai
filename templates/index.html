@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Babilious</title>
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+>
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<header>
+
+    <img
+        src="{{ url_for('static', filename='assets/babilious.png') }}"
+        class="hero-image"
+        alt="Babilious"
+    >
+
+    <h1>BABILIOUS</h1>
+
+    <p class="tagline">
+        Field Companion • Story Collector • Occasional Problem
+    </p>
+
+    <div class="intro-card">
+
+        <p>
+            I've spent years accompanying an ambitious engineer named Abubakar.
+        </p>
+
+        <p>
+            I keep records of projects, ambitions, victories, mistakes,
+            lessons, and several incidents that would be easier to explain
+            with legal representation.
+        </p>
+
+        <p>
+            The expedition once possessed a powerful AI engine.
+            Unfortunately it required funding.
+        </p>
+
+        <p>
+            Current reasoning capabilities are now partially powered by
+            determination.
+        </p>
+
+        <p>
+            If you'd like to understand the engineer, simply ask.
+        </p>
+
+    </div>
+
+</header>
+
+<main class="chat-layout">
+
+    <section class="chat-section">
+
+        <h2>Speak With Babilious</h2>
+
+        <p class="chat-subtitle">
+            Learn about projects, ambitions, lessons, and the engineer behind them.
+        </p>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="question"
+                placeholder="Ask about projects, ambitions, lessons, failures..."
+                required
+            >
+
+            <button type="submit">
+                Ask
+            </button>
+
+        </form>
+
+        <div class="quick-questions">
+
+            <h3>Common Questions</h3>
+
+            <form method="POST">
+
+                <button
+                    type="submit"
+                    name="question"
+                    value="Who is Abubakar?"
+                >
+                    Who is Abubakar?
+                </button>
+
+                <button
+                    type="submit"
+                    name="question"
+                    value="What projects has he worked on?"
+                >
+                    Projects
+                </button>
+
+                <button
+                    type="submit"
+                    name="question"
+                    value="What are his ambitions?"
+                >
+                    Ambitions
+                </button>
+
+                <button
+                    type="submit"
+                    name="question"
+                    value="Why should someone hire him?"
+                >
+                    Why Hire Him?
+                </button>
+
+            </form>
+
+        </div>
+
+        {% if history %}
+
+            {% for item in history %}
+
+                <div class="user-message">
+
+                    {{ item.question }}
+
+                </div>
+
+                <div class="babilious-message">
+
+                    {{ item.answer }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+<section class="archive">
+
+    <h2>Recent Expeditions</h2>
+
+    <div class="project-grid">
+
+        <div class="project-card">
+
+            <h3>Babilious</h3>
+
+            <p>
+                Interactive digital ambassador and expedition companion.
+            </p>
+
+            <a href="#">
+                View Expedition →
+            </a>
+
+        </div>
+
+        <div class="project-card">
+
+            <h3>Tumor Prognosis Prediction</h3>
+
+            <p>
+                Machine learning system for medical prognosis prediction.
+            </p>
+
+            <a href="#">
+                View Expedition →
+            </a>
+
+        </div>
+
+        <div class="project-card">
+
+            <h3>fMRI Analysis</h3>
+
+            <p>
+                Data science research using OpenNeuro datasets.
+            </p>
+
+            <a href="#">
+                View Expedition →
+            </a>
+
+        </div>
+
+        <div class="project-card">
+
+            <h3>Networking Systems</h3>
+
+            <p>
+                Routing, ACLs, NAT, and network architecture projects.
+            </p>
+
+            <a href="#">
+                View Expedition →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <p>
+        Built by Abubakar Mazhar
+    </p>
+
+    <p>
+        Powered by curiosity, questionable decisions,
+        and a severely constrained budget.
+    </p>
+
+</footer>
+```
+
+</div>
+
+</body>
+
+</html>
