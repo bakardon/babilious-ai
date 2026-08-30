@@ -2,14 +2,11 @@ from memory_manager import get_recent_entries
 
 
 def build_memory_context():
+    """Return recent memory in a neutral form for future AI integrations."""
     entries = get_recent_entries()
-
     if not entries:
-        return "No adventures recorded yet."
+        return "No recent memories recorded."
 
-    memory_text = "Recent Adventure Log:\n"
-
-    for entry in entries:
-        memory_text += f"- [{entry['type']}] {entry['summary']}\n"
-
-    return memory_text
+    return "Recent context:\n" + "\n".join(
+        f"- [{entry['type']}] {entry['summary']}" for entry in entries
+    )
