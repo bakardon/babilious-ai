@@ -1,64 +1,142 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Meet Babilious, Abubakar Mazhar's interactive digital ambassador.">
-    <title>Babilious — Digital Ambassador</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Babilious — Abubakar Mazhar's AI companion and portfolio manager.">
+  <title>Babilious — AI Companion</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="page-shell">
-        <header class="hero">
-            <div class="status"><span class="status-dot"></span> EXPEDITION ONLINE</div>
-            <div class="character-frame">
-                <img src="{{ url_for('static', filename='assets/babilious.png') }}" alt="Babilious, digital expedition companion">
-            </div>
-            <p class="eyebrow">FIELD COMPANION · STORY COLLECTOR · OCCASIONAL PROBLEM</p>
-            <h1>Babilious</h1>
-            <p class="tagline">“I keep the records. Abubakar keeps making new ones.”</p>
-            <div class="music-pill"><span>♫</span> <span>Currently listening</span><strong>Music integration coming soon</strong></div>
-        </header>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark">🐾</div>
+        <div><h1>Babilious</h1><span>Your AI companion & manager</span></div>
+        <button class="icon-btn" id="new-chat" title="New chat" aria-label="New chat">↗</button>
+      </div>
 
-        <main class="content-grid">
-            <section class="panel intro-panel">
-                <span class="panel-label">FIELD NOTES</span>
-                <h2>So, you found me.</h2>
-                <p>I am Babilious — an interactive digital ambassador and reluctant manager of an ambitious engineer named Abubakar.</p>
-                <p>I keep records of projects, ambitions, lessons, victories, mistakes, and several incidents that would be easier to explain with legal representation.</p>
-                <p>If you want to understand the engineer behind this portfolio, ask me. I may even have the answer.</p>
-                <div class="quick-actions">
-                    <form method="POST"><button name="question" value="Who is Abubakar?">Who is Abubakar?</button></form>
-                    <form method="POST"><button name="question" value="What projects has he worked on?">His projects</button></form>
-                    <form method="POST"><button name="question" value="What are his ambitions?">His ambitions</button></form>
-                    <form method="POST"><button name="question" value="Why should someone hire him?">Why hire him?</button></form>
-                </div>
-            </section>
+      <div class="mascot-card">
+        <div class="mascot-glow"></div>
+        <img src="{{ url_for('static', filename='assets/babilious.svg') }}" alt="Babilious, a cute puppy">
+      </div>
 
-            <section class="panel chat-panel">
-                <div class="panel-heading">
-                    <div><span class="panel-label">COMMUNICATION CHANNEL</span><h2>Speak with Babilious</h2></div>
-                    <form method="POST" action="{{ url_for('clear_history') }}"><button class="clear" type="submit">Clear</button></form>
-                </div>
-                <div class="chat-history" aria-live="polite">
-                    {% if history %}
-                        {% for item in history %}
-                            <div class="message user"><span>YOU</span><p>{{ item.question }}</p></div>
-                            <div class="message babilious"><span>BABILIOUS</span><p>{{ item.answer }}</p></div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="empty-state"><div class="pulse">◈</div><h3>Archives ready.</h3><p>Ask me about Abubakar, his work, his ambitions, or the questionable decisions that made the journey interesting.</p></div>
-                    {% endif %}
-                </div>
-                <form class="chat-form" method="POST">
-                    <label class="sr-only" for="question">Ask Babilious</label>
-                    <input id="question" type="text" name="question" placeholder="Ask Babilious something..." autocomplete="off" required>
-                    <button type="submit">Send ↗</button>
-                </form>
-            </section>
-        </main>
+      <div class="music-card">
+        <div class="music-title"><span>♫</span> Listening on Spotify</div>
+        <div class="music-placeholder">Spotify integration coming next</div>
+        <div class="music-subtitle">Music will pause automatically during conversation.</div>
+      </div>
 
-        <footer><span>BABILIOUS / DIGITAL AMBASSADOR</span><span>Built by Abubakar Mazhar</span></footer>
-    </div>
+      <div class="note-card">
+        <p>“I help Abubakar keep things organized, answer questions, and occasionally remind him to touch grass.”</p>
+        <span>♥</span>
+      </div>
+
+      <nav class="quick-links" aria-label="Portfolio links">
+        <h2>Quick links</h2>
+        <a href="https://github.com/bakardon" target="_blank" rel="noopener">GitHub <span>›</span></a>
+        <a href="https://www.linkedin.com/in/abubakarbinmazhar" target="_blank" rel="noopener">LinkedIn <span>›</span></a>
+        <button data-question="Tell me about Abubakar">About Abubakar <span>›</span></button>
+        <button data-question="What projects has Abubakar built?">Projects <span>›</span></button>
+        <button data-question="What are Abubakar's technical skills?">Technical skills <span>›</span></button>
+      </nav>
+    </aside>
+
+    <main class="chat-app">
+      <header class="chat-header">
+        <div><span class="online-dot"></span><span>Babilious</span></div>
+        <div class="header-actions">
+          <button class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">☾</button>
+          <button class="icon-btn" id="clear-chat" title="Clear chat" aria-label="Clear chat">⌫</button>
+        </div>
+      </header>
+
+      <section class="chat-scroll" id="chat-scroll" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <img src="{{ url_for('static', filename='assets/babilious.svg') }}" alt="" class="welcome-avatar">
+          <div class="welcome-kicker">AI COMPANION</div>
+          <h2>Hey! I'm Babilious. <span>🐾</span></h2>
+          <p>Ask me anything about Abubakar, his projects, skills, experience, or what he's building.</p>
+          <div class="suggestions">
+            <button data-question="Who is Abubakar?">Who is Abubakar?</button>
+            <button data-question="What projects has he built?">What projects has he built?</button>
+            <button data-question="What are his technical skills?">What are his technical skills?</button>
+            <button data-question="Why should someone hire him?">Why should someone hire him?</button>
+          </div>
+        </div>
+
+        <div id="messages">
+          {% for item in history %}
+            <article class="message user-message"><div class="message-label">YOU</div><div class="bubble">{{ item.question }}</div></article>
+            <article class="message bot-message"><img src="{{ url_for('static', filename='assets/babilious.svg') }}" alt="" class="tiny-avatar"><div><div class="message-label">BABILIOUS</div><div class="bubble">{{ item.answer }}</div></div></article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <footer class="composer-area">
+        <div class="composer" id="composer">
+          <button class="language" title="Language">◎ English <span>⌄</span></button>
+          <textarea id="message" rows="1" placeholder="Ask me anything..." autocomplete="off"></textarea>
+          <button class="send-btn" id="send" title="Send" aria-label="Send">➤</button>
+        </div>
+        <div class="music-status"><span class="spotify-dot"></span><strong>Music</strong> will play here · pauses when we chat</div>
+      </footer>
+    </main>
+  </div>
+
+<script>
+const messages = document.getElementById('messages');
+const welcome = document.getElementById('welcome');
+const input = document.getElementById('message');
+const send = document.getElementById('send');
+const scroll = document.getElementById('chat-scroll');
+const composer = document.getElementById('composer');
+
+function escapeHtml(value) {
+  return value.replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+function addMessage(role, text) {
+  const article = document.createElement('article');
+  article.className = `message ${role === 'user' ? 'user-message' : 'bot-message'}`;
+  if (role === 'user') article.innerHTML = `<div class="message-label">YOU</div><div class="bubble">${escapeHtml(text)}</div>`;
+  else article.innerHTML = `<img src="/static/assets/babilious.svg" alt="" class="tiny-avatar"><div><div class="message-label">BABILIOUS</div><div class="bubble">${escapeHtml(text)}</div></div>`;
+  messages.appendChild(article);
+  scroll.scrollTop = scroll.scrollHeight;
+  return article;
+}
+async function ask(text) {
+  text = text.trim();
+  if (!text) return;
+  welcome.style.display = 'none';
+  addMessage('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+  composer.classList.add('loading');
+  send.disabled = true;
+  const typing = addMessage('bot', 'Thinking...');
+  typing.classList.add('typing');
+  try {
+    const response = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:text})});
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Request failed');
+    typing.remove();
+    addMessage('bot', data.answer);
+  } catch (error) {
+    typing.remove();
+    addMessage('bot', 'I could not reach my knowledge base. Check that the local server is running and try again.');
+  } finally {
+    composer.classList.remove('loading');
+    send.disabled = false;
+    input.focus();
+  }
+}
+send.addEventListener('click', () => ask(input.value));
+input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input.value); } });
+input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight, 140)+'px'; });
+document.querySelectorAll('[data-question]').forEach(button => button.addEventListener('click', () => ask(button.dataset.question)));
+document.getElementById('clear-chat').addEventListener('click', async () => { await fetch('/api/clear', {method:'POST'}); messages.innerHTML=''; welcome.style.display='flex'; input.focus(); });
+document.getElementById('new-chat').addEventListener('click', () => document.getElementById('clear-chat').click());
+document.getElementById('theme-toggle').addEventListener('click', () => document.body.classList.toggle('light'));
+</script>
 </body>
 </html>
