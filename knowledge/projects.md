@@ -1,93 +1,68 @@
 # Projects
 
-## AI Companion (Babilious)
+## Babilious
 
-Status: Active Expedition
+Status: Active
 
-This project began as a simple AI companion built using Google ADK and Gemini.
+Babilious started as an experiment with Google ADK and Gemini and evolved into a conversational portfolio interface. The current web version focuses on giving visitors a natural way to learn about Abubakar's work.
 
-Most explorers would have stopped there.
+Current components include:
 
-Unfortunately, curiosity was involved.
+* Flask web application
+* Conversational interface
+* Local portfolio knowledge base
+* Session-based chat history
+* Character/persona definition
+* Responsive UI and mascot
 
-The objective evolved from building a chatbot into creating a digital ambassador capable of explaining projects, goals, lessons, and adventures through the perspective of a fictional companion named Babilious.
+Planned components include a hosted AI agent, Spotify playback, automatic music pause/resume during conversations, and voice interaction.
 
-Current systems include:
+---
 
-* Character Engine
-* Adventure Log
-* Mission System
-* Expedition Briefings
-* Persistent Memory
+## City Sentinel
 
-The long-term goal is to create a companion that remembers journeys rather than conversations.
+A real-time computer-vision and data-engineering system for intelligent surveillance and event detection.
+
+Technologies include:
+
+* YOLOv8
+* OpenCV
+* InsightFace
+* EasyOCR
+* FastAPI
+* PostgreSQL
+* RTSP camera streams
+
+---
+
+## Wikipedia Live Edit Pipeline
+
+An end-to-end data engineering platform built around real-time Wikipedia edits and historical Clickstream data.
+
+Technologies include Kafka, Spark Structured Streaming, PostgreSQL, dbt, Docker, Streamlit, and automated testing.
+
+---
+
+## CloudLab Platform
+
+A backend/cloud project exploring REST APIs, authentication, PostgreSQL persistence, asynchronous processing with RabbitMQ, Docker, and deployment concepts.
 
 ---
 
 ## Tumor Prognosis Prediction
 
-Status: Research Expedition
-
-Objective:
-
-Predict tumor prognosis using machine learning and medical imaging data.
-
-This expedition involved:
-
-* MRI datasets
-* Data preprocessing
-* Segmentation
-* Machine learning workflows
-* Medical data analysis
-
-This project represents an intersection between healthcare and artificial intelligence.
-
-It also represents a significant amount of debugging.
+A machine-learning research project exploring prognosis prediction from medical imaging data, including MRI preprocessing, segmentation, and model development.
 
 ---
 
-## fMRI Data Science Project
+## fMRI Analysis
 
-Dataset:
-
-DMCC55B (OpenNeuro)
-
-Objective:
-
-Analyze fMRI data and extract meaningful insights using data science techniques.
-
-Areas explored:
-
-* Data preprocessing
-* Statistical analysis
-* Visualization
-* Research workflows
+A scientific-computing project using MATLAB and SPM for subject-level fMRI analysis, statistical modeling, and contrasts.
 
 ---
 
-## Networking and Systems Projects
+## Engineering Projects
 
-Throughout his engineering studies, Abubakar has worked on networking projects involving:
+Other academic projects cover digital systems, FPGA/Verilog design, networking, DSP, numerical methods, and signal processing.
 
-* Routing
-* OSPF
-* RIP
-* ACLs
-* NAT
-* Network design
-
-These projects provided practical exposure to real-world networking concepts and infrastructure design.
-
----
-
-## Future Expeditions
-
-Planned areas of exploration:
-
-* Artificial Intelligence
-* Machine Learning Systems
-* Agentic Applications
-* Entrepreneurship
-* Human-Centered Software
-
-Several ambitious ideas remain under investigation.
+These projects provide the engineering foundations behind Abubakar's more recent AI, data, and backend work.
