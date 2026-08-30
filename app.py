@@ -1,29 +1,41 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, jsonify, render_template, request, session
 from babilious_engine import ask_babilious
 
 app = Flask(__name__)
-app.secret_key = "babilious-local-dev-key"
+app.config["SECRET_KEY"] = "change-this-in-production"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 
-@app.route("/", methods=["GET", "POST"])
+def get_history():
+    return session.get("chat_history", [])
+
+
+@app.get("/")
 def home():
-    history = session.get("chat_history", [])
-
-    if request.method == "POST":
-        question = request.form.get("question", "").strip()
-
-        if question:
-            answer = ask_babilious(question)
-            history.append({"question": question, "answer": answer})
-            session["chat_history"] = history[-20:]
-
-    return render_template("index.html", history=session.get("chat_history", []))
+    return render_template("index.html", history=get_history())
 
 
-@app.post("/clear")
+@app.post("/api/chat")
+def chat():
+    data = request.get_json(silent=True) or {}
+    question = str(data.get("message", "")).strip()
+
+    if not question:
+        return jsonify({"error": "Please enter a message."}), 400
+
+    history = get_history()
+    answer = ask_babilious(question)
+    history.append({"question": question, "answer": answer})
+    session["chat_history"] = history[-30:]
+
+    return jsonify({"question": question, "answer": answer})
+
+
+@app.post("/api/clear")
 def clear_history():
     session.pop("chat_history", None)
-    return ("", 204)
+    return jsonify({"ok": True})
 
 
 if __name__ == "__main__":
