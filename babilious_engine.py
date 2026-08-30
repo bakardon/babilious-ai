@@ -1,41 +1,58 @@
 from knowledge_retriever import retrieve_answer
 
 
+def _clean_markdown(text: str) -> str:
+    """Turn local markdown notes into readable chat text."""
+    lines = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            if lines and lines[-1] != "":
+                lines.append("")
+            continue
+        if stripped.startswith("#"):
+            stripped = stripped.lstrip("#").strip()
+        lines.append(stripped)
+    return "\n".join(lines).strip()
+
+
+def _intro() -> str:
+    return (
+        "I'm Babilious — Abubakar's AI companion and portfolio manager.\n\n"
+        "I can tell you about his background, projects, technical skills, experience, "
+        "and the things he's building. What would you like to know?"
+    )
+
+
 def ask_babilious(question: str) -> str:
-    """Return a short in-character answer grounded in the local knowledge base."""
-    q = question.lower()
+    """Answer a visitor using Babilious' local portfolio knowledge base."""
+    q = question.lower().strip()
 
-    if "api" in q:
+    if q in {"hi", "hello", "hey", "yo", "sup", "hey there"}:
+        return "Hey. I'm Babilious. What would you like to know about Abubakar?"
+
+    if "who are you" in q or "what are you" in q:
         return (
-            "The expedition once possessed a powerful AI engine.\n\n"
-            "Unfortunately, it required funding.\n"
-            "We no longer discuss the incident."
+            "I'm Babilious — Abubakar's AI companion and portfolio manager. "
+            "Think of me as the helpful layer between you and his portfolio."
         )
 
-    if "money" in q or "budget" in q:
-        return (
-            "Current treasury report:\n\n"
-            "• 2 paperclips\n"
-            "• one notebook\n"
-            "• optimism\n\n"
-            "Budget status remains concerning."
-        )
+    if "who is abubakar" in q or q in {"about abubakar", "tell me about abubakar"}:
+        return _intro() if not retrieve_answer("about Abubakar") else _answer_from("about Abubakar")
 
     result = retrieve_answer(question)
-
     if result:
         _, filename, content = result
-        return (
-            "Ah, let me consult the expedition archives.\n\n"
-            f"{content[:900]}\n\n"
-            "The remainder of the record has been condensed for traveller sanity."
-        )
+        return _clean_markdown(content[:2200])
 
     return (
-        "A curious question.\n\n"
-        "Unfortunately the expedition archives contain no reliable record regarding "
-        "that topic.\n\n"
-        "Either the information has not yet been documented, or Abubakar forgot to "
-        "tell me.\n\n"
-        "Both possibilities are equally plausible."
+        "I don't have a reliable answer for that in my current knowledge base. "
+        "Try asking about Abubakar, his projects, skills, experience, or ambitions."
     )
+
+
+def _answer_from(question: str) -> str:
+    result = retrieve_answer(question)
+    if not result:
+        return _intro()
+    return _clean_markdown(result[2][:2200])
