@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-MEMORY_FILE = Path("memory/adventure_log.json")
+MEMORY_FILE = Path(__file__).resolve().parent / "memory" / "adventure_log.json"
 
 
 def load_memory():

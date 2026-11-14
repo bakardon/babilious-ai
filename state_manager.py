@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-STATE_FILE = Path("state/user_state.json")
+STATE_FILE = Path(__file__).resolve().parent / "state" / "user_state.json"
 
 
 def load_state():

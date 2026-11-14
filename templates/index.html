@@ -3,140 +3,587 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Babilious — Abubakar Mazhar's AI companion and portfolio manager.">
-  <title>Babilious — AI Companion</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="description" content="Babilious: a local-first personal AI companion.">
+  <title>Babilious</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand-row">
-        <div class="brand-mark">🐾</div>
-        <div><h1>Babilious</h1><span>Your AI companion & manager</span></div>
-        <button class="icon-btn" id="new-chat" title="New chat" aria-label="New chat">↗</button>
-      </div>
+<div class="shell">
 
-      <div class="mascot-card">
-        <div class="mascot-glow"></div>
-        <img src="{{ url_for('static', filename='assets/babilious.svg') }}" alt="Babilious, a cute puppy">
-      </div>
+  <!-- ============ sidebar ============ -->
+  <nav class="rail" aria-label="Sections">
+    <div class="rail-brand" title="Babilious">🐾</div>
+    <button class="rail-btn active" data-view="chat"><span class="ico">💬</span><span>Chat</span></button>
+    <button class="rail-btn" data-view="brain"><span class="ico">🧠</span><span>Second Brain</span></button>
+    <button class="rail-btn" data-view="files"><span class="ico">📁</span><span>Files</span></button>
+    <button class="rail-btn" data-view="tasks"><span class="ico">✅</span><span>Tasks</span></button>
+    <button class="rail-btn" data-view="calendar"><span class="ico">📅</span><span>Calendar</span></button>
+    <button class="rail-btn" data-view="reminders"><span class="ico">⏰</span><span>Reminders</span></button>
+    <button class="rail-btn" data-view="research"><span class="ico">🔎</span><span>Research</span></button>
+    <button class="rail-btn" data-view="automation"><span class="ico">⚙️</span><span>Automation</span></button>
+    <div class="rail-spacer"></div>
+    <button class="rail-btn" data-view="settings"><span class="ico">🛠️</span><span>Settings</span></button>
+  </nav>
 
-      <div class="music-card">
-        <div class="music-title"><span>♫</span> Listening on Spotify</div>
-        <div class="music-placeholder">Spotify integration coming next</div>
-        <div class="music-subtitle">Music will pause automatically during conversation.</div>
-      </div>
+  <!-- ============ main ============ -->
+  <main class="main">
 
-      <div class="note-card">
-        <p>“I help Abubakar keep things organized, answer questions, and occasionally remind him to touch grass.”</p>
-        <span>♥</span>
-      </div>
+    <!-- ---------- CHAT ---------- -->
+    <section class="view view-chat active" data-view="chat">
+      <div class="stage">
+        <header class="stage-head">
+          <button class="ghost-btn" id="open-transcript" title="Conversation history">☰ History</button>
+          <h1 class="title">Babilious</h1>
+          <button class="ghost-btn" id="new-chat" title="Start a new conversation">＋ New</button>
+        </header>
 
-      <nav class="quick-links" aria-label="Portfolio links">
-        <h2>Quick links</h2>
-        <a href="https://github.com/bakardon" target="_blank" rel="noopener">GitHub <span>›</span></a>
-        <a href="https://www.linkedin.com/in/abubakarbinmazhar" target="_blank" rel="noopener">LinkedIn <span>›</span></a>
-        <button data-question="Tell me about Abubakar">About Abubakar <span>›</span></button>
-        <button data-question="What projects has Abubakar built?">Projects <span>›</span></button>
-        <button data-question="What are Abubakar's technical skills?">Technical skills <span>›</span></button>
-      </nav>
-    </aside>
-
-    <main class="chat-app">
-      <header class="chat-header">
-        <div><span class="online-dot"></span><span>Babilious</span></div>
-        <div class="header-actions">
-          <button class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">☾</button>
-          <button class="icon-btn" id="clear-chat" title="Clear chat" aria-label="Clear chat">⌫</button>
-        </div>
-      </header>
-
-      <section class="chat-scroll" id="chat-scroll" aria-live="polite">
-        <div class="welcome" id="welcome">
-          <img src="{{ url_for('static', filename='assets/babilious.svg') }}" alt="" class="welcome-avatar">
-          <div class="welcome-kicker">AI COMPANION</div>
-          <h2>Hey! I'm Babilious. <span>🐾</span></h2>
-          <p>Ask me anything about Abubakar, his projects, skills, experience, or what he's building.</p>
-          <div class="suggestions">
-            <button data-question="Who is Abubakar?">Who is Abubakar?</button>
-            <button data-question="What projects has he built?">What projects has he built?</button>
-            <button data-question="What are his technical skills?">What are his technical skills?</button>
-            <button data-question="Why should someone hire him?">Why should someone hire him?</button>
+        <div class="portrait-wrap">
+          <div class="portrait" id="portrait">
+            {% include "partials/dog.svg.html" %}
           </div>
         </div>
 
-        <div id="messages">
-          {% for item in history %}
-            <article class="message user-message"><div class="message-label">YOU</div><div class="bubble">{{ item.question }}</div></article>
-            <article class="message bot-message"><img src="{{ url_for('static', filename='assets/babilious.svg') }}" alt="" class="tiny-avatar"><div><div class="message-label">BABILIOUS</div><div class="bubble">{{ item.answer }}</div></div></article>
-          {% endfor %}
+        <div class="status-line" id="status-line" aria-live="polite">Idle</div>
+        <div class="caption" id="caption" aria-live="polite">
+          <p class="caption-hint">Talk to me. Or don't. I'll be here either way.</p>
         </div>
-      </section>
-
-      <footer class="composer-area">
-        <div class="composer" id="composer">
-          <button class="language" title="Language">◎ English <span>⌄</span></button>
-          <textarea id="message" rows="1" placeholder="Ask me anything..." autocomplete="off"></textarea>
-          <button class="send-btn" id="send" title="Send" aria-label="Send">➤</button>
+        <div class="chips" id="chips">
+          <button data-ask="What's unfinished?">What's unfinished?</button>
+          <button data-ask="What are we doing today?">What are we doing today?</button>
+          <button data-ask="Switch to the faster model">Faster model</button>
+          <button data-ask="Tell me about Abubakar's projects">My projects</button>
+          <button data-ask="Show me my latest files">Latest files</button>
         </div>
-        <div class="music-status"><span class="spotify-dot"></span><strong>Music</strong> will play here · pauses when we chat</div>
-      </footer>
-    </main>
-  </div>
 
-<script>
-const messages = document.getElementById('messages');
-const welcome = document.getElementById('welcome');
-const input = document.getElementById('message');
-const send = document.getElementById('send');
-const scroll = document.getElementById('chat-scroll');
-const composer = document.getElementById('composer');
+        <footer class="composer">
+          <select id="voice-select" class="voice-select" title="Spoken replies (local voices only)">
+            <option value="off">🔇 Voice off</option>
+          </select>
+          <div class="input-wrap">
+            <textarea id="input" rows="2" placeholder="Ask me anything..." autocomplete="off"></textarea>
+          </div>
+          <button class="hands-btn" id="hands-btn" disabled aria-pressed="false"
+                  title="Hands-free: listen for the wake word">👂</button>
+          <button class="mic-btn" id="mic-btn" disabled title="Hold to talk">🎙️</button>
+          <button class="send-btn" id="send-btn" title="Send (Enter)" aria-label="Send">
+            <svg viewBox="0 0 24 24" width="30" height="30"><path d="M3 20l18-8L3 4l2 7 9 1-9 1z" fill="currentColor"/></svg>
+          </button>
+        </footer>
+      </div>
 
-function escapeHtml(value) {
-  return value.replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-}
-function addMessage(role, text) {
-  const article = document.createElement('article');
-  article.className = `message ${role === 'user' ? 'user-message' : 'bot-message'}`;
-  if (role === 'user') article.innerHTML = `<div class="message-label">YOU</div><div class="bubble">${escapeHtml(text)}</div>`;
-  else article.innerHTML = `<img src="/static/assets/babilious.svg" alt="" class="tiny-avatar"><div><div class="message-label">BABILIOUS</div><div class="bubble">${escapeHtml(text)}</div></div>`;
-  messages.appendChild(article);
-  scroll.scrollTop = scroll.scrollHeight;
-  return article;
-}
-async function ask(text) {
-  text = text.trim();
-  if (!text) return;
-  welcome.style.display = 'none';
-  addMessage('user', text);
-  input.value = '';
-  input.style.height = 'auto';
-  composer.classList.add('loading');
-  send.disabled = true;
-  const typing = addMessage('bot', 'Thinking...');
-  typing.classList.add('typing');
-  try {
-    const response = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:text})});
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Request failed');
-    typing.remove();
-    addMessage('bot', data.answer);
-  } catch (error) {
-    typing.remove();
-    addMessage('bot', 'I could not reach my knowledge base. Check that the local server is running and try again.');
-  } finally {
-    composer.classList.remove('loading');
-    send.disabled = false;
-    input.focus();
-  }
-}
-send.addEventListener('click', () => ask(input.value));
-input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input.value); } });
-input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight, 140)+'px'; });
-document.querySelectorAll('[data-question]').forEach(button => button.addEventListener('click', () => ask(button.dataset.question)));
-document.getElementById('clear-chat').addEventListener('click', async () => { await fetch('/api/clear', {method:'POST'}); messages.innerHTML=''; welcome.style.display='flex'; input.focus(); });
-document.getElementById('new-chat').addEventListener('click', () => document.getElementById('clear-chat').click());
-document.getElementById('theme-toggle').addEventListener('click', () => document.body.classList.toggle('light'));
-</script>
+      <!-- right-hand status panel -->
+      <aside class="side-panel" id="side-panel">
+        <div class="card">
+          <div class="card-title">Brain</div>
+          <div class="kv"><span>Model</span><b id="st-model">…</b></div>
+          <div class="kv"><span>Ollama</span><b id="st-ollama">…</b></div>
+          <div class="kv"><span>Loaded</span><b id="st-loaded">…</b></div>
+        </div>
+        <div class="card">
+          <div class="card-title">System</div>
+          <div class="meter"><span>CPU</span><div class="bar"><i id="st-cpu-bar"></i></div><b id="st-cpu">…</b></div>
+          <div class="meter"><span>RAM</span><div class="bar"><i id="st-ram-bar"></i></div><b id="st-ram">…</b></div>
+          <div class="kv small"><span>Babilious app</span><b id="st-app">…</b></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Current task</div>
+          <div id="st-task" class="muted">…</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Today</div>
+          <div id="st-today" class="muted small">…</div>
+          <div class="quick" style="margin-top:8px"><button data-ask="Good morning">Brief me</button>
+            <button data-ask="What did I accomplish this week?">My week</button></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Voice &amp; music</div>
+          <div class="kv"><span>Microphone</span><b id="st-mic" class="pending">Off</b></div>
+          <div class="kv"><span>Spoken replies</span><b id="st-voice">Off</b></div>
+          <div class="music" id="music-card">
+            <img id="music-art" alt="" hidden>
+            <div class="grow"><div class="music-title" id="music-title">Music</div>
+              <div class="muted small" id="music-sub">Checking...</div></div>
+            <div class="music-ctl">
+              <button data-music="previous" title="Previous track" aria-label="Previous track">⏮</button>
+              <button data-music="toggle" title="Play / pause" aria-label="Play or pause">⏯</button>
+              <button data-music="next" title="Next track" aria-label="Next track">⏭</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Quick actions</div>
+          <div class="quick">
+            <button data-ask="What's unfinished?">Unfinished</button>
+            <button data-ask="What's on my screen?">Look at screen</button>
+            <button data-goto="automation">Automation</button>
+            <button data-goto="tasks">Tasks</button>
+            <button data-goto="brain">Memories</button>
+            <button data-goto="settings">Models</button>
+          </div>
+        </div>
+        <div class="card grow">
+          <div class="card-title">Recent activity</div>
+          <ul class="activity" id="st-activity"></ul>
+        </div>
+      </aside>
+
+      <!-- transcript drawer -->
+      <div class="drawer" id="transcript" aria-hidden="true">
+        <div class="drawer-head">
+          <strong>Conversation</strong>
+          <button class="ghost-btn" id="close-transcript">✕</button>
+        </div>
+        <div class="drawer-body">
+          <div class="messages" id="messages"></div>
+          <div class="history-search">
+            <input class="search" id="history-q" placeholder="Search everything: chats, notes, tasks, reminders...">
+            <ul class="list compact" id="history-results"></ul>
+          </div>
+          <details class="past">
+            <summary>Past conversations</summary>
+            <ul id="conversation-list"></ul>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- SECOND BRAIN ---------- -->
+    <section class="view page" data-view="brain">
+      <h2>Second Brain</h2>
+      <p class="lead">Long-term memories Babilious uses in every conversation. You decide what stays.</p>
+      <form class="row-form" id="memory-form">
+        <select id="memory-kind"></select>
+        <input id="memory-content" placeholder="Something worth remembering..." required maxlength="500">
+        <button class="primary">Remember</button>
+      </form>
+      <input class="search" id="memory-search" placeholder="Search memories...">
+      <ul class="list" id="memory-list"></ul>
+      <h3>Notes</h3>
+      <form class="note-form" id="note-form">
+        <textarea id="note-body" rows="3" placeholder="Quick note... (#tags work). Or in chat: &quot;note that ...&quot;" required></textarea>
+        <button class="primary">Save note</button>
+      </form>
+      <input class="search" id="note-search" placeholder="Search notes...">
+      <ul class="list" id="note-list"></ul>
+
+      <h3>Document map</h3>
+      <p class="muted">Indexed documents linked by shared topics or direct links. Click one to open it in Files.</p>
+      <div class="graph-wrap">
+        <canvas id="graph" height="420"></canvas>
+        <div class="graph-tip" id="graph-tip" hidden></div>
+        <p class="muted graph-empty" id="graph-empty" hidden>Nothing to map yet. Add a folder in Files.</p>
+      </div>
+
+      <h3>How Babilious uses your files</h3>
+      <form class="toggles" id="brain-settings">
+        <label><input type="checkbox" name="use_documents_in_chat"> Use indexed files as context in chat (with sources)</label>
+        <label><input type="checkbox" name="semantic_search"> Semantic search (finds meaning, not just words; needs
+          <code>nomic-embed-text</code>, about 270 MB, from Settings &gt; Models)</label>
+      </form>
+
+      <h3>Knowledge files</h3>
+      <p class="muted">Markdown notes in <code>knowledge/</code>, searched automatically when relevant.</p>
+      <ul class="list compact" id="knowledge-list"></ul>
+    </section>
+
+    <!-- ---------- FILES ---------- -->
+    <section class="view page" data-view="files">
+      <h2>Files</h2>
+      <p class="lead">Babilious reads only the folders you add here. Files are never changed, moved or uploaded.</p>
+
+      <div class="card-block">
+        <div class="block-head">
+          <h3>Indexed folders</h3>
+          <div class="row-actions">
+            <button class="primary" id="pick-folder" title="Opens the Windows folder picker">＋ Add folder</button>
+            <button class="ghost-btn" id="reindex-all">↻ Re-index all</button>
+          </div>
+        </div>
+        <form class="row-form" id="folder-form">
+          <input id="folder-path" placeholder="...or type a path, e.g. C:\Users\ENVY\Documents\Notes">
+          <button class="ghost-btn">Add path</button>
+        </form>
+        <div class="index-status" id="index-status" hidden>
+          <div class="progress indeterminate"><i></i></div>
+          <span id="index-status-text"></span>
+          <button class="icon-btn" id="cancel-index" title="Cancel indexing">✕ Cancel</button>
+        </div>
+        <ul class="list" id="folder-list"></ul>
+        <p class="muted small" id="index-stats"></p>
+      </div>
+
+      <h3>Search</h3>
+      <div class="row-form">
+        <input id="file-q" placeholder="Search names and contents..." autocomplete="off">
+        <select id="file-ext" title="Type">
+          <option value="">All types</option>
+          <option value=".pdf">PDF</option>
+          <option value=".docx">Word</option>
+          <option value=".md .txt">Notes (MD/TXT)</option>
+          <option value=".py .js .ts .m .c .cpp .java .ipynb">Code</option>
+          <option value=".png .jpg .jpeg">Images</option>
+        </select>
+        <select id="file-sort" title="Order">
+          <option value="relevance">Best match</option>
+          <option value="modified">Newest first</option>
+        </select>
+      </div>
+      <div class="files-layout">
+        <ul class="list" id="file-results"></ul>
+        <aside class="doc-detail" id="doc-detail" hidden></aside>
+      </div>
+      <div class="notice">Opening, creating, moving or deleting files arrives in <b>Milestone 4</b>, always with a confirmation step.</div>
+    </section>
+
+    <!-- ---------- TASKS ---------- -->
+    <section class="view page" data-view="tasks">
+      <h2>Tasks</h2>
+      <div class="voice-grid manager-grid">
+        <section class="card-block">
+          <div class="block-head"><h3>Projects</h3>
+            <button class="ghost-btn" data-ask="Help me organise my master's applications" title="Example">✨ Plan a goal</button></div>
+          <ul class="list compact" id="project-progress"></ul>
+        </section>
+        <section class="card-block">
+          <div class="block-head"><h3>Habits</h3></div>
+          <ul class="list compact" id="habit-list"></ul>
+          <form class="row-form" id="habit-form">
+            <input id="habit-name" placeholder="New habit, e.g. Read 20 minutes" required maxlength="60">
+            <select id="habit-schedule">
+              <option value="daily">Every day</option><option value="weekdays">Weekdays</option>
+              <option value="3x_week">3× a week</option><option value="2x_week">2× a week</option><option value="1x_week">Weekly</option>
+            </select>
+            <button class="ghost-btn">Track</button>
+          </form>
+        </section>
+      </div>
+      <form class="row-form" id="task-form">
+        <input id="task-title" placeholder="New task..." required maxlength="300">
+        <select id="task-priority" title="Priority">
+          <option value="1">High</option><option value="2" selected>Normal</option><option value="3">Low</option>
+        </select>
+        <input id="task-due" type="date" title="Due date">
+        <input id="task-project" placeholder="Project" maxlength="60">
+        <button class="primary">Add</button>
+      </form>
+      <div class="tabs" id="task-filter">
+        <button class="active" data-filter="open">Open</button>
+        <button data-filter="done">Done</button>
+        <button data-filter="">All</button>
+      </div>
+      <ul class="list" id="task-list"></ul>
+      <p class="muted">Tip: in chat, say "create a task to finish my GitHub portfolio by Friday, high priority",
+        "I finished the portfolio task", "what's due this week?" or "help me organise my master's applications".</p>
+    </section>
+
+    <!-- ---------- CALENDAR ---------- -->
+    <section class="view page" data-view="calendar">
+      <h2>Calendar</h2>
+      <div class="cal-head">
+        <button class="ghost-btn" id="cal-prev">‹</button>
+        <strong id="cal-title"></strong>
+        <button class="ghost-btn" id="cal-next">›</button>
+      </div>
+      <div class="calendar" id="calendar"></div>
+      <p class="muted">Tasks by due date (click a day to add one), reminders (⏰/🔁) and, if you've linked one in
+        Settings &gt; Integrations, events from your Google/Outlook calendar (📅, read-only).
+        <span id="cal-status"></span></p>
+    </section>
+
+    <!-- ---------- REMINDERS ---------- -->
+    <section class="view page" data-view="reminders">
+      <h2>Reminders</h2>
+      <p class="lead">Babilious checks every 20 seconds and pops up a Windows notification (and says it out loud if voice is on).
+        Reminders missed while he was closed are delivered when he starts.</p>
+      <form class="row-form" id="reminder-form">
+        <input id="reminder-text" placeholder="What? e.g. continue the radar project" required maxlength="300">
+        <input id="reminder-when" placeholder="When? e.g. tomorrow at 9, in 2 hours, every weekday at 8:30" required>
+        <button class="primary">Remind me</button>
+      </form>
+      <p class="muted small" id="reminder-preview">&nbsp;</p>
+      <h3>Waiting for you</h3>
+      <ul class="list" id="reminders-fired"></ul>
+      <h3>Upcoming</h3>
+      <ul class="list" id="reminders-upcoming"></ul>
+      <h3>Notifications</h3>
+      <ul class="list compact" id="notification-list"></ul>
+      <h3>Daily briefing &amp; alerts</h3>
+      <form class="toggles" id="manager-settings">
+        <label><input type="checkbox" name="desktop_notifications"> Windows desktop notifications</label>
+        <label>Morning briefing notification at <input type="time" name="briefing_time" class="inline-time">
+          <span class="muted small">(empty = off; say "good morning" any time for the spoken version)</span></label>
+      </form>
+    </section>
+
+    <!-- ---------- RESEARCH ---------- -->
+    <section class="view page" data-view="research">
+      <h2>Research</h2>
+      <p class="lead">Searches the web, Wikipedia and arXiv for free, reads the pages on this PC, and writes a summary
+        where every point is tied to a numbered source. Figures that aren't in the pages get flagged. Everything is saved here.
+        In chat: "research solid-state batteries", "quick research on Rust vs Go", "find papers on radar gesture recognition".</p>
+      <form class="row-form" id="research-form">
+        <input name="topic" placeholder="What should I look into?" maxlength="200" required>
+        <select name="depth">
+          <option value="quick">Quick · 3 sources</option>
+          <option value="normal" selected>Normal · 5 sources</option>
+          <option value="deep">Deep · 7 sources</option>
+        </select>
+        <label class="inline-check"><input type="checkbox" name="papers"> Include papers (arXiv)</label>
+        <button class="primary" id="research-go">Research</button>
+      </form>
+      <div class="research-card" id="research-live" hidden>
+        <ul class="research-progress" id="research-progress"></ul>
+        <div class="research-summary" id="research-summary"></div>
+        <div id="research-warnings"></div>
+        <ol class="web-sources" id="research-sources"></ol>
+        <div class="row-actions" id="research-live-actions" hidden>
+          <button class="ghost-btn" data-rs="note">Save as note</button>
+        </div>
+      </div>
+      <h3>Saved research</h3>
+      <input class="search" id="research-search" placeholder="Search saved research...">
+      <ul class="list" id="research-list"></ul>
+    </section>
+
+    <!-- ---------- AUTOMATION ---------- -->
+    <section class="view page" data-view="automation">
+      <h2>Automation</h2>
+      <p class="lead">What Babilious may do on this PC. Safe things run when you ask; anything that changes, runs or
+        deletes something waits for your approval here or in the chat.</p>
+
+      <h3>Waiting for approval</h3>
+      <div id="pending-actions" class="pending-actions"></div>
+
+      <h3>Try it</h3>
+      <div class="quick big-quick">
+        <button data-quick="What's on my screen?">👁 Look at my screen</button>
+        <button data-quick="Take a screenshot">📸 Screenshot</button>
+        <button data-quick="What's in my clipboard?">📋 Explain my clipboard</button>
+        <button data-quick="What's in my Downloads folder?">📂 Downloads</button>
+        <button data-quick="git status">🌿 git status</button>
+        <button data-quick="Run the tests for my Babilious project">🧪 Run Babilious tests</button>
+        <button data-quick="Open VS Code">💻 Open VS Code</button>
+      </div>
+
+      <div class="voice-grid" style="margin-top:14px">
+        <section class="card-block">
+          <h3>Apps he can open</h3>
+          <ul class="list compact" id="app-list"></ul>
+          <form class="row-form" id="app-form">
+            <input id="app-name" placeholder="Name to say, e.g. arduino" required maxlength="40">
+            <input id="app-path" placeholder="C:\path\to\program.exe" required>
+            <button class="ghost-btn">Add app</button>
+          </form>
+        </section>
+        <section class="card-block">
+          <h3>Projects</h3>
+          <p class="muted small">"Open my &lt;name&gt; project", "run the tests for &lt;name&gt;". Folders on your Desktop and
+            in Documents are found automatically too.</p>
+          <ul class="list compact" id="project-list"></ul>
+          <form class="row-form" id="project-form">
+            <input id="project-name" placeholder="Name, e.g. radar" required maxlength="40">
+            <input id="project-path" placeholder="C:\path\to\project" required>
+            <button class="ghost-btn">Add project</button>
+          </form>
+        </section>
+        <section class="card-block">
+          <h3>Rules</h3>
+          <label class="field">Where new files and folders go (when you don't say)
+            <input id="default-folder" placeholder="Documents"></label>
+          <label class="toggles"><span><input type="checkbox" id="model-routing">
+            Let the AI model suggest actions for requests I don't recognise (always needs your approval)</span></label>
+          <ul class="rules muted small">
+            <li><b>Runs directly when you ask:</b> opening apps, folders and websites; listing and reading files; read-only commands
+              (<code>git status</code>, <code>dir</code>...); screenshots; clipboard; media and volume keys.</li>
+            <li><b>Asks first:</b> running tests and other commands, moving files, clicking in web pages, locking the PC.</li>
+            <li><b>Asks with a warning:</b> deleting (always to the Recycle Bin), overwriting, installs, <code>git push</code>,
+              shutdown, anything that writes to files or downloads.</li>
+            <li><b>Never:</b> formatting or wiping disks, editing system registry, touching Windows, Program Files or AppData,
+              typing passwords or card numbers.</li>
+          </ul>
+        </section>
+      </div>
+
+      <h3>Recent actions</h3>
+      <ul class="list compact" id="action-history"></ul>
+
+      <h3>Activity log</h3>
+      <p class="muted">Everything Babilious did, suggested or failed to do.</p>
+      <ul class="list compact" id="activity-list"></ul>
+    </section>
+
+    <!-- ---------- SETTINGS ---------- -->
+    <section class="view page" data-view="settings">
+      <h2>Settings</h2>
+      <div class="tabs" id="settings-tabs">
+        <button class="active" data-tab="models">Models</button>
+        <button data-tab="voice">Voice</button>
+        <button data-tab="integrations">Integrations</button>
+        <button data-tab="prefs">Preferences</button>
+        <button data-tab="health">Health</button>
+        <button data-tab="about">About</button>
+      </div>
+
+      <div class="tab-pane active" data-tab="models">
+        <p class="muted">Everything runs locally through Ollama. Smaller models answer faster; bigger ones reason better.</p>
+        <h3>Installed</h3>
+        <ul class="list" id="model-list"></ul>
+        <h3>Download more</h3>
+        <ul class="list" id="model-suggestions"></ul>
+        <div class="row-form">
+          <input id="custom-model" placeholder="Any Ollama model name, e.g. mistral:7b">
+          <button class="ghost-btn" id="custom-pull">Download</button>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="voice">
+        <div class="voice-grid">
+          <section class="card-block">
+            <h3>Speech recognition (faster-whisper)</h3>
+            <ul class="list compact" id="stt-models"></ul>
+            <div class="row-actions" style="margin-top:8px">
+              <button class="ghost-btn" id="voice-prepare">Load now</button>
+              <span class="muted small" id="stt-status"></span>
+            </div>
+          </section>
+          <section class="card-block">
+            <h3>Babilious' voice (Piper)</h3>
+            <ul class="list compact" id="tts-voices"></ul>
+            <label class="field">Speaking speed <span class="muted" id="rate-val"></span>
+              <input type="range" id="speech-rate" min="0.6" max="1.6" step="0.05"></label>
+          </section>
+          <section class="card-block">
+            <h3>Hands-free</h3>
+            <label class="field">Wake engine
+              <select id="wake-engine">
+                <option value="whisper">Whisper spotting: any name (default "Babilious")</option>
+                <option value="openwakeword">openWakeWord: pretrained phrase, lighter CPU</option>
+              </select></label>
+            <label class="field" id="wake-word-field">Wake word <input id="wake-word" maxlength="30"></label>
+            <label class="field" id="oww-field" hidden>openWakeWord model
+              <select id="oww-model">
+                <option value="hey_jarvis">hey jarvis</option><option value="hey_mycroft">hey mycroft</option>
+                <option value="hey_rhasspy">hey rhasspy</option><option value="alexa">alexa</option>
+              </select></label>
+            <label class="field">Interrupting him (barge-in)
+              <select id="barge-in">
+                <option value="voice">Just start talking</option>
+                <option value="wake">Say the wake word</option>
+                <option value="off">Only with the mic button or typing</option>
+              </select></label>
+            <label class="field">Keep listening after he answers <span class="muted" id="follow-val"></span>
+              <input type="range" id="follow-up" min="0" max="15" step="1"></label>
+            <label class="field">Mic sensitivity <span class="muted" id="sens-val"></span>
+              <input type="range" id="vad-sens" min="5" max="25" step="1"></label>
+            <p class="muted small">Hands-free keeps the mic open and shows a red indicator. Audio is processed
+              in memory on this PC and discarded; nothing is recorded or uploaded.</p>
+          </section>
+          <section class="card-block">
+            <h3>Devices</h3>
+            <label class="field">Microphone <select id="mic-device"><option value="">System default</option></select></label>
+            <label class="field">Speaker <select id="speaker-device"><option value="">System default</option></select></label>
+            <div class="row-actions">
+              <button class="ghost-btn" id="mic-test">Test microphone</button>
+              <div class="meter-inline"><i id="mic-test-level"></i></div>
+            </div>
+            <p class="muted small" id="device-note"></p>
+          </section>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="integrations">
+        <p class="muted">All optional, all free, all yours: each one uses your own account and stays on this PC.
+          Nothing is sent anywhere until you set it up here.</p>
+        <div class="voice-grid">
+          <section class="card-block">
+            <h3>🎵 Spotify</h3>
+            <p class="small muted" id="sp-status">…</p>
+            <ol class="small steps">
+              <li>Open <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a>
+                and create an app (free). Choose <b>Web API</b>.</li>
+              <li>Add this Redirect URI: <code id="sp-redirect"></code> <button class="link-btn" id="sp-copy">copy</button></li>
+              <li>Paste the app's <b>Client ID</b> here (no secret needed):</li>
+            </ol>
+            <div class="row-form">
+              <input id="sp-client" placeholder="32-character Client ID" maxlength="32" spellcheck="false">
+              <button class="ghost-btn" id="sp-save">Save</button>
+            </div>
+            <div class="row-actions">
+              <button class="primary" id="sp-connect">Connect Spotify</button>
+              <button class="ghost-btn" id="sp-disconnect" hidden>Disconnect</button>
+            </div>
+            <label class="inline-check"><input type="checkbox" id="music-pause-voice"> Pause music while I'm talking to him</label>
+            <p class="muted small">Without this, "what's playing", pause and skip still work through Windows media
+              controls. Spotify only allows starting songs through its API on Premium accounts.</p>
+          </section>
+          <section class="card-block">
+            <h3>📅 Google / Outlook calendar (read-only)</h3>
+            <p class="small muted">In Google Calendar: Settings → your calendar → <b>Secret address in iCal format</b>.
+              Paste it here. Events show on the Calendar and in your morning briefing. He never writes to your calendar.</p>
+            <div class="row-form">
+              <input id="ics-url" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics" spellcheck="false">
+              <button class="ghost-btn" id="ics-save">Save</button>
+              <button class="ghost-btn" id="ics-refresh">Refresh</button>
+            </div>
+            <p class="small" id="ics-status"></p>
+            <p class="muted small">Gmail isn't connected: reading mail needs a Google Cloud app with restricted scopes
+              and a security review, which isn't practical for a free personal setup.</p>
+          </section>
+          <section class="card-block">
+            <h3>🐙 Git &amp; GitHub</h3>
+            <ul class="list compact" id="gh-status"></ul>
+            <p class="muted small">Try: "git status of babilious", "write a commit message for babilious",
+              "show open issues for babilious". Commits need your approval; pushes are marked dangerous and always
+              need a click. For private repos' issues, run <code>gh auth login</code> once in a terminal.</p>
+          </section>
+          <section class="card-block">
+            <h3>👁️ Vision model (optional)</h3>
+            <label class="field">Model for "describe my screen" / "describe image ..."
+              <select id="vision-model"><option value="">Off (read text with OCR only)</option></select></label>
+            <p class="muted small" id="vision-note"></p>
+            <h3 style="margin-top:14px">🔎 Research</h3>
+            <label class="field">Default depth for research in chat
+              <select id="research-depth">
+                <option value="quick">Quick · 3 sources</option><option value="normal">Normal · 5 sources</option>
+                <option value="deep">Deep · 7 sources (slower)</option>
+              </select></label>
+          </section>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="prefs">
+        <form class="prefs" id="prefs-form">
+          <label>Your name <input name="user_name" maxlength="40"></label>
+          <label>Creativity (temperature) <input name="temperature" type="number" min="0" max="1.5" step="0.1"></label>
+          <label>Context window (tokens) <select name="num_ctx"><option>2048</option><option>4096</option><option>8192</option></select></label>
+          <label>Max reply length (tokens) <input name="max_reply_tokens" type="number" min="50" max="2000" step="50"></label>
+          <label>Messages of history sent <input name="history_messages" type="number" min="0" max="30"></label>
+          <label>Keep model in RAM after use
+            <select name="keep_alive"><option value="2m">2 minutes</option><option value="10m">10 minutes</option>
+              <option value="30m">30 minutes</option><option value="0">Unload immediately</option></select></label>
+          <button class="primary">Save</button>
+          <span class="muted" id="prefs-saved"></span>
+        </form>
+      </div>
+
+      <div class="tab-pane" data-tab="health">
+        <button class="ghost-btn" id="run-health">Run checks again</button>
+        <ul class="list" id="health-list"></ul>
+      </div>
+
+      <div class="tab-pane" data-tab="about">
+        <p>Babilious runs entirely on this laptop: Flask + SQLite + Ollama. No paid APIs, no cloud.</p>
+        <p class="muted">Data lives in <code>data/babilious.db</code>. Logs in <code>data/logs/</code>.</p>
+        <p><a href="https://github.com/bakardon" target="_blank" rel="noopener">GitHub</a> ·
+           <a href="https://www.linkedin.com/in/abubakarbinmazhar" target="_blank" rel="noopener">LinkedIn</a></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="banners" id="banners" aria-live="assertive"></div>
+<script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

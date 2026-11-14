@@ -1,1 +1,30 @@
+# All free and open source.
+
+# Core (Milestone 1)
 Flask>=3.0,<4.0
+requests>=2.31
+psutil>=5.9
+
+# Second brain (Milestone 2)
+pypdf>=4.0          # PDF text
+python-docx>=1.1    # Word .docx text
+numpy>=1.26         # vectors, audio maths
+
+# Voice (Milestone 3). Models download on first use into data/models/ (~210 MB with the defaults)
+faster-whisper>=1.1 # speech-to-text (CTranslate2, int8 on CPU)
+piper-tts>=1.3      # text-to-speech (ONNX)
+openwakeword>=0.6   # optional pretrained wake words ("hey jarvis" etc.)
+flask-sock>=0.7     # WebSocket for streaming mic audio from the page to this PC
+
+# Computer assistant (Milestone 4)
+pillow>=10          # screenshots (ImageGrab)
+rapidocr-onnxruntime>=1.3  # local OCR for "what's on my screen?" (models bundled, ~15 MB)
+pyperclip>=1.8      # clipboard
+send2trash>=1.8     # deletes go to the Recycle Bin, never permanent
+playwright>=1.45    # web automation; drives your installed Edge/Chrome (no browser download needed)
+
+# Research & integrations (Milestone 6): web research, Spotify, git and vision use packages above
+tzdata>=2024.1      # time zones for Google/Outlook calendar feeds (Windows has no tz database)
+
+# Development / tests
+pytest>=8.0

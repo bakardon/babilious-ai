@@ -9,3 +9,7 @@ env/
 .vscode/
 .idea/
 *.log
+
+# Babilious local data (database, logs, secret key)
+data/
+.pytest_cache/

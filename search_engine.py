@@ -1,6 +1,6 @@
 from pathlib import Path
 
-KNOWLEDGE_FOLDER = Path("knowledge")
+KNOWLEDGE_FOLDER = Path(__file__).resolve().parent / "knowledge"
 
 
 def search_knowledge(query):

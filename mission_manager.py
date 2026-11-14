@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-MISSION_FILE = Path("state/missions.json")
+MISSION_FILE = Path(__file__).resolve().parent / "state" / "missions.json"
 
 
 def load_missions():
