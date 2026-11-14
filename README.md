@@ -2,15 +2,15 @@
 
 **A free, local-first personal AI companion for Windows.**
 
-Babilious is a fat, shirtless, curly Spanish Water Dog (allegedly) with the competence of a jaded
+Babilious is a fat Spanish Water Dog (allegedly) with the competence of a jaded
 genius and none of the patience for corporate speak. He runs entirely on your laptop: a local
 LLM through [Ollama](https://ollama.com), a SQLite database, and a small Flask web app. No paid
 APIs, no cloud, no keys.
 
-He started as a conversational portfolio for Abubakar Mazhar and is growing into a JARVIS-style
-assistant, one milestone at a time. See [BUILD_STATUS.md](BUILD_STATUS.md) for exactly what works today.
+He started as a conversational portfolio for me and is growing into a prototype for an 
+assistant. See [BUILD_STATUS.md](BUILD_STATUS.md) for exactly what works today.
 
-## What works now (Milestones 1–6)
+## What works now
 
 - Chat with Babilious through a local model (streamed, interruptible)
 - An animated dog with 11 expressions (idle, listening, thinking, speaking, happy, excited,
@@ -30,7 +30,7 @@ assistant, one milestone at a time. See [BUILD_STATUS.md](BUILD_STATUS.md) for e
 - Optional semantic search with a local embedding model (`nomic-embed-text`)
 - **Voice**: hold the mic button or Space to talk (faster-whisper), or turn on hands-free and say
   "Babilious". He answers out loud with Piper, lip-synced, and you can interrupt him mid-sentence.
-  All of it runs on this PC.
+  All of it runs on your PC.
 - **Computer assistant**: "open VS Code", "open my Babilious project in VS Code", "create a folder called
   Research", "what's in my Downloads folder?", "run the tests for my project", "why did that fail?",
   "what's on my screen?", "explain what I copied", "open Chrome and go to GitHub", "pause the music".
